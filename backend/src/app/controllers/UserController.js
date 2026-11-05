@@ -48,6 +48,14 @@ class UserController {
       admin: user.admin,
     });
   }
+
+  async index(_request, response) {
+    const users = await User.findAll({
+      attributes: ['id', 'name', 'email', 'admin'],
+    });
+
+    return response.status(200).json(users);
+  }
 }
 
 export default new UserController();

@@ -1,4 +1,4 @@
 export default {
   secret: process.env.JWT_SECRET,
-  experiresIn: '7d',
+  experiresIn: '5d',
 };
