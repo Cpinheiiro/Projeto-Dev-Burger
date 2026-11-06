@@ -2,7 +2,17 @@
 
 Esse é o back-end do DevBurger, um sistema de pedidos de uma hamburgueria. Fiz durante a minha formação de programador pra treinar Node.js na prática: login com token, banco relacional, banco de documentos, upload de imagem e tudo mais que uma API de verdade precisa ter.
 
-Estou migrando de carreira (vim da área de comércio exterior e logística) e esse é um dos projetos que estou construindo pra entrar como desenvolvedor front-end. O front-end em React vem na sequência, num repositório separado.
+Estou migrando de carreira (vim da área de comércio exterior e logística) e esse é um dos projetos que estou construindo pra entrar como desenvolvedor front-end. O front-end em React está na pasta `frontend`, no mesmo repositório, e ainda está em construção.
+
+## Estrutura do projeto
+
+```
+Projeto-Dev-Burger/
+├── backend/    → a API (Node.js, Express, PostgreSQL e MongoDB)
+└── frontend/   → a interface (React + Vite)
+```
+
+Cada pasta tem o seu próprio gerenciador de pacotes: pnpm no back-end e Yarn no front-end. As seções abaixo, até "O que quero melhorar", são do back-end. Depois vem a parte do front-end.
 
 ## O que a API faz
 
@@ -14,13 +24,13 @@ Estou migrando de carreira (vim da área de comércio exterior e logística) e e
 
 ## Tecnologias
 
-- **Node.js** com **Express**
-- **PostgreSQL** + **Sequelize** (usuários, categorias e produtos)
-- **MongoDB** + **Mongoose** (pedidos)
-- **JWT** (`jsonwebtoken`) e **bcryptjs** pra autenticação e senha criptografada
-- **Yup** pra validar o que chega do cliente
-- **Multer** pra upload de imagens
-- **Biome** pra formatação
+- Node.js com Express
+- PostgreSQL + Sequelize (usuários, categorias e produtos)
+- MongoDB + Mongoose (pedidos)
+- JWT (jsonwebtoken) e bcryptjs pra autenticação e senha criptografada
+- Yup pra validar o que chega do cliente
+- Multer pra upload de imagens
+- Biome pra formatação
 
 Usei dois bancos de propósito: os dados que se relacionam (categoria → produto) ficam no Postgres, e o pedido fica no Mongo como um documento único, com uma cópia do nome e do preço dos produtos no momento da compra.
 
@@ -31,7 +41,7 @@ Você vai precisar de Node 20.12 ou mais novo, pnpm, PostgreSQL e MongoDB rodand
 ```bash
 # 1. clonar o projeto
 git clone https://github.com/Cpinheiiro/Projeto-Dev-Burger.git
-cd Projeto-Dev-Burger
+cd Projeto-Dev-Burger/backend
 
 # 2. instalar as dependências
 pnpm install
@@ -49,18 +59,18 @@ Depois, no Postgres, cria o banco `dev-burger-db` e um usuário chamado `admin` 
 npx sequelize db:migrate
 ```
 
-A conexão do MongoDB (`mongodb://localhost:27017/...`) está em `src/database/index.js`. Cria também a pasta `uploads` na raiz do projeto, que é onde as imagens são salvas. Por fim:
+A conexão do MongoDB (`mongodb://localhost:27017/...`) está em `src/database/index.js`. Cria também a pasta `uploads` na raiz da pasta `backend`, que é onde as imagens são salvas. Por fim:
 
 ```bash
 pnpm dev
 ```
 
-O servidor sobe na porta **3001**.
+O servidor sobe na porta 3001.
 
-### Variáveis de ambiente
+## Variáveis de ambiente
 
 | Variável | Pra que serve |
-|---|---|
+| --- | --- |
 | `JWT_SECRET` | Chave usada pra assinar os tokens de login |
 | `DB_PASSWORD` | Senha do PostgreSQL |
 
@@ -69,7 +79,7 @@ O servidor sobe na porta **3001**.
 Tudo que está abaixo de "login necessário" precisa do token no header `Authorization: Bearer SEU_TOKEN`.
 
 | Método | Rota | Acesso | O que faz |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | POST | `/users` | público | Cadastra um usuário |
 | POST | `/session` | público | Faz login e devolve o token |
 | POST | `/products` | admin | Cria um produto (com imagem) |
@@ -84,7 +94,7 @@ Tudo que está abaixo de "login necessário" precisa do token no header `Authori
 
 ### Exemplo: criando um pedido
 
-O cliente manda só o `id` do produto e a quantidade. O nome, o preço e a categoria eu busco no banco, e o usuário vem do token. Assim ninguém consegue mandar um preço inventado.
+O cliente manda só o id do produto e a quantidade. O nome, o preço e a categoria eu busco no banco, e o usuário vem do token. Assim ninguém consegue mandar um preço inventado.
 
 ```json
 {
@@ -99,7 +109,7 @@ O cliente manda só o `id` do produto e a quantidade. O nome, o preço e a categ
 
 Uso o Insomnia pra testar, mas dá pra usar Postman ou qualquer outro cliente. A porta é a 3001, então as rotas ficam em `http://localhost:3001`. Essa é a ordem pra testar do zero:
 
-**1. Criar um usuário admin** (`POST /users`)
+**1. Criar um usuário admin (`POST /users`)**
 
 ```json
 {
@@ -110,7 +120,7 @@ Uso o Insomnia pra testar, mas dá pra usar Postman ou qualquer outro cliente. A
 }
 ```
 
-**2. Fazer login** (`POST /session`)
+**2. Fazer login (`POST /session`)**
 
 ```json
 {
@@ -121,19 +131,19 @@ Uso o Insomnia pra testar, mas dá pra usar Postman ou qualquer outro cliente. A
 
 A resposta traz o token. Nas próximas rotas, coloque ele no header `Authorization` como `Bearer SEU_TOKEN`.
 
-**3. Criar uma categoria** (`POST /categories`)
+**3. Criar uma categoria (`POST /categories`)**
 
-Esse envio é do tipo **Multipart Form**, com os campos `name` (texto) e `file` (a imagem).
+Esse envio é do tipo Multipart Form, com os campos `name` (texto) e `file` (a imagem).
 
-**4. Criar um produto** (`POST /products`)
+**4. Criar um produto (`POST /products`)**
 
-Também Multipart Form, com os campos `name`, `price`, `category_id` (o id da categoria que você criou), `offer` (opcional, `true` ou `false`) e `file` (a imagem).
+Também Multipart Form, com os campos `name`, `price`, `category_id` (o id da categoria que você criou), `offer` (opcional, true ou false) e `file` (a imagem).
 
-**5. Fazer um pedido** (`POST /orders`)
+**5. Fazer um pedido (`POST /orders`)**
 
-Use o corpo do exemplo acima, com o `id` do produto que você criou.
+Use o corpo do exemplo acima, com o id do produto que você criou.
 
-**6. Atualizar o status do pedido** (`PUT /orders/:id`, só admin)
+**6. Atualizar o status do pedido (`PUT /orders/:id`, só admin)**
 
 ```json
 {
@@ -154,9 +164,94 @@ Sei que ainda tem coisa pra evoluir, e essa é a lista do que vou melhorar:
 - [ ] Impedir que qualquer pessoa se cadastre como admin
 - [ ] Regras de transição de status (um pedido entregue não volta pra "em preparo")
 
+---
+
+# 🎨 Front-end
+
+Essa é a parte que o cliente vai ver. Ainda está no começo, mas a base já está de pé: rotas, cadastro, login e o início da home, já conversando com a API.
+
+## O que o front já faz
+
+- Tela de cadastro com validação: nome, email, senha com no mínimo 6 caracteres e confirmação de senha
+- Tela de login com validação, aviso de "verificando", de sucesso e de erro
+- Se o email já existe no cadastro, aparece um aviso na tela
+- Depois do login, o token fica guardado no navegador e é enviado sozinho em todas as chamadas pra API
+- Home com banner de boas-vindas e carrossel de categorias, que vem direto da API
+- O carrossel se ajusta ao tamanho da tela: 4 categorias no desktop, 3 no tablet e 2 no celular
+
+### Telas
+
+| Rota | O que mostra |
+| --- | --- |
+| `/login` | Login do usuário |
+| `/cadastro` | Criação de conta |
+| `/` | Home com banner e carrossel de categorias |
+
+## Tecnologias
+
+- React 19 com Vite
+- React Router pra navegação entre as telas
+- styled-components pra estilização
+- React Hook Form + Yup pra formulários e validação (o mesmo Yup que uso no back-end)
+- Axios pra falar com a API
+- React Toastify pros avisos na tela
+- react-multi-carousel pro carrossel
+- ESLint + Prettier pra manter o código organizado
+- Yarn como gerenciador de pacotes
+
+## Como rodar o front
+
+O back-end precisa estar rodando na porta 3001, porque o endereço da API está fixo em `src/services/api.js`. Com ele no ar:
+
+```bash
+# 1. entrar na pasta do front
+cd frontend
+
+# 2. instalar as dependências
+yarn
+
+# 3. rodar
+yarn dev
+```
+
+O Vite mostra o endereço no terminal, normalmente `http://localhost:5173`.
+
+Outros comandos:
+
+| Comando | O que faz |
+| --- | --- |
+| `yarn dev` | Roda o projeto em modo de desenvolvimento |
+| `yarn build` | Gera a versão de produção |
+| `yarn preview` | Abre a versão de produção pra conferir |
+| `yarn lint` | Procura problemas no código |
+| `yarn lint:fix` | Corrige o que dá pra corrigir sozinho |
+
+## Como o front está organizado
+
+```
+frontend/src
+├── assets/        imagens (logo, fundo, banner)
+├── components/    Button e CategoriesCarousel
+├── containers/    as telas: Login, Register e home
+├── routes/        as rotas do app
+├── services/      api.js, a configuração do Axios
+└── styles/        estilos globais
+```
+
+## O que falta no front
+
+- [ ] Carrossel de produtos na home (hoje é só um espaço reservado)
+- [ ] Mostrar as categorias pra cliente comum: hoje a rota `GET /categories` é só de admin, então o carrossel só funciona logado como admin (é o segundo item da lista de melhorias do back)
+- [ ] Proteger as telas: hoje a home abre mesmo sem login
+- [ ] Carrinho e tela de pedidos
+- [ ] Tirar o endereço da API do código e colocar numa variável de ambiente
+- [ ] Limpar os `console.log` que sobraram
+
+---
+
 ## Autor
 
-Feito por **Cauê Pinheiro**, de Blumenau - SC.
+Feito por Cauê Pinheiro, de Blumenau - SC.
 
 - GitHub: [@Cpinheiiro](https://github.com/Cpinheiiro)
 - LinkedIn: [Cauê Pinheiro](https://www.linkedin.com/in/cau%C3%AApinheiro/)
