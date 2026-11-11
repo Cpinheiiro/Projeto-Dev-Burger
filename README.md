@@ -2,7 +2,7 @@
 
 Esse é o back-end do DevBurger, um sistema de pedidos de uma hamburgueria. Fiz durante a minha formação de programador pra treinar Node.js na prática: login com token, banco relacional, banco de documentos, upload de imagem e tudo mais que uma API de verdade precisa ter.
 
-Estou migrando de carreira (vim da área de comércio exterior e logística) e esse é um dos projetos que estou construindo pra entrar como desenvolvedor front-end. O front-end em React está na pasta `frontend`, no mesmo repositório, e ainda está em construção.
+Estou migrando de carreira (vim da área de comércio exterior e logística) e esse é um dos projetos que estou construindo pra entrar como desenvolvedor front-end. O front-end em React está na pasta `frontend`, no mesmo repositório. O back-end está concluído e o front-end ainda está em construção.
 
 ## Estrutura do projeto
 
@@ -168,16 +168,18 @@ Sei que ainda tem coisa pra evoluir, e essa é a lista do que vou melhorar:
 
 # 🎨 Front-end
 
-Essa é a parte que o cliente vai ver. Ainda está no começo, mas a base já está de pé: rotas, cadastro, login e o início da home, já conversando com a API.
+Essa é a parte que o cliente vai ver. Ainda está em construção, mas a base já está de pé: rotas, cadastro, login, a home e o início do cardápio, tudo já conversando com a API.
 
 ## O que o front já faz
 
 - Tela de cadastro com validação: nome, email, senha com no mínimo 6 caracteres e confirmação de senha
 - Tela de login com validação, aviso de "verificando", de sucesso e de erro
 - Se o email já existe no cadastro, aparece um aviso na tela
-- Depois do login, o token fica guardado no navegador e é enviado sozinho em todas as chamadas pra API
-- Home com banner de boas-vindas e carrossel de categorias, que vem direto da API
-- O carrossel se ajusta ao tamanho da tela: 4 categorias no desktop, 3 no tablet e 2 no celular
+- Depois do login, os dados do usuário e o token ficam guardados no navegador, e continuo logado mesmo atualizando a página
+- O token é enviado sozinho em todas as chamadas pra API
+- Home com banner de boas-vindas, carrossel de categorias e carrossel de "Ofertas do dia" (os produtos marcados como oferta), tudo vindo direto da API
+- Os carrosséis se ajustam ao tamanho da tela: 4 itens no desktop, 3 no tablet e 2 no celular
+- Página de cardápio começando, com card de produto e botão do carrinho
 
 ### Telas
 
@@ -185,7 +187,8 @@ Essa é a parte que o cliente vai ver. Ainda está no começo, mas a base já es
 | --- | --- |
 | `/login` | Login do usuário |
 | `/cadastro` | Criação de conta |
-| `/` | Home com banner e carrossel de categorias |
+| `/` | Home com banner, categorias e ofertas do dia |
+| `/cardapio` | Cardápio (em construção) |
 
 ## Tecnologias
 
@@ -230,17 +233,19 @@ Outros comandos:
 
 ```
 frontend/src
-├── assets/        imagens (logo, fundo, banner)
-├── components/    Button e CategoriesCarousel
-├── containers/    as telas: Login, Register e home
+├── assets/        imagens em SVG (logo, fundos, banner, carrinho)
+├── components/    Button, CategoriesCarousel, OffersCarousel, CardProduct e CartButton
+├── containers/    as telas: Login, Register, home e Menu
+├── hooks/         o contexto do usuário (UserContext)
 ├── routes/        as rotas do app
 ├── services/      api.js, a configuração do Axios
+├── utils/         funções de apoio
 └── styles/        estilos globais
 ```
 
 ## O que falta no front
 
-- [ ] Carrossel de produtos na home (hoje é só um espaço reservado)
+- [ ] Terminar a página de cardápio
 - [ ] Mostrar as categorias pra cliente comum: hoje a rota `GET /categories` é só de admin, então o carrossel só funciona logado como admin (é o segundo item da lista de melhorias do back)
 - [ ] Proteger as telas: hoje a home abre mesmo sem login
 - [ ] Carrinho e tela de pedidos
@@ -248,6 +253,10 @@ frontend/src
 - [ ] Limpar os `console.log` que sobraram
 
 ---
+
+## Como uso IA
+
+Uso IA neste projeto pra ganhar agilidade e pra aprender. Ela é uma ferramenta de estudo e de apoio no desenvolvimento.
 
 ## Autor
 
