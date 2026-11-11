@@ -1,8 +1,8 @@
 import { Link as ReactLink } from 'react-router-dom';
 import styled from 'styled-components';
 
-import BackgroundLogin from '../../assets/backgroundlogin.jpg';
-import Background from '../../assets/fundo.png';
+import BackgroundLogin from '../../assets/fundo-login.svg';
+import Background from '../../assets/fundo.svg';
 
 export const Container = styled.div`
   display: flex;
