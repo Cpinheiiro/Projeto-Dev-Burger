@@ -201,6 +201,9 @@ Essa é a parte que o cliente vai ver. Ainda está em construção, mas a base j
 - react-multi-carousel pro carrossel
 - ESLint + Prettier pra manter o código organizado
 - Yarn como gerenciador de pacotes
+- Context API do React pra guardar os dados do usuário logado em todo o app
+- localStorage pra manter o login depois de atualizar a página
+- react-icons pros ícones da interface
 
 ## Como rodar o front
 
