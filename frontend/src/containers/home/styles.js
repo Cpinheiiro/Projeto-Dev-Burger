@@ -1,7 +1,7 @@
 import Styled from 'styled-components';
 
 import BannerHome from '../../assets/banner-home.svg';
-import Background from '../../assets/fundo.png';
+import Background from '../../assets/fundo.svg';
 
 export const Banner = Styled.div`
     background-image: url(${BannerHome});
@@ -25,8 +25,5 @@ export const Container = Styled.section`
         rgba(255,255,255,0.7)
     ),
     url(${Background});
-    height: 500px;
     background-size: cover;
 `;
-
-export const Content = Styled.div``;
